@@ -1,8 +1,8 @@
 ﻿#if __IOS__
-#define NC_AUTH_GOOGLE
-#define NC_AUTH_FACEBOOK
-#define NC_AUTH_MICROSOFT
-#define NC_AUTH_TWITTER
+//#define NC_AUTH_GOOGLE
+//#define NC_AUTH_FACEBOOK
+//#define NC_AUTH_MICROSOFT
+//#define NC_AUTH_TWITTER
 
 using System;
 
@@ -36,62 +36,62 @@ using NomadCode.UIExtensions;
 
 namespace NomadCode.ClientAuth
 {
-	public class AuthViewController : UIViewController
+    public class AuthViewController : UIViewController
 #if NC_AUTH_GOOGLE
 	, ISignInDelegate, ISignInUIDelegate
 #endif
-	{
-		SignInButton _authButtonGoogle, _authButtonMicrosoft, _authButtonTwitter, _authButtonFacebook;
+    {
+        SignInButton _authButtonGoogle, _authButtonMicrosoft, _authButtonTwitter, _authButtonFacebook;
 
-		SignInButton AuthButtonGoogle => _authButtonGoogle ?? (_authButtonGoogle = new SignInButton { Tag = 0 });
-		SignInButton AuthButtonFacebook => _authButtonFacebook ?? (_authButtonFacebook = new SignInButton { Tag = 1 });
-		SignInButton AuthButtonMicrosoft => _authButtonMicrosoft ?? (_authButtonMicrosoft = new SignInButton { Tag = 2 });
-		SignInButton AuthButtonTwitter => _authButtonTwitter ?? (_authButtonTwitter = new SignInButton { Tag = 3 });
+        SignInButton AuthButtonGoogle => _authButtonGoogle ?? (_authButtonGoogle = new SignInButton { Tag = 0 });
+        SignInButton AuthButtonFacebook => _authButtonFacebook ?? (_authButtonFacebook = new SignInButton { Tag = 1 });
+        SignInButton AuthButtonMicrosoft => _authButtonMicrosoft ?? (_authButtonMicrosoft = new SignInButton { Tag = 2 });
+        SignInButton AuthButtonTwitter => _authButtonTwitter ?? (_authButtonTwitter = new SignInButton { Tag = 3 });
 
-		public nuint AvatarSize { get; set; } = 24;
+        public nuint AvatarSize { get; set; } = 24;
 
-		public AuthViewController () { }
+        public AuthViewController () { }
 
-		public AuthViewController (IntPtr handle) : base (handle) { }
+        public AuthViewController (IntPtr handle) : base (handle) { }
 
-		public override void ViewDidLoad ()
-		{
-			base.ViewDidLoad ();
+        public override void ViewDidLoad ()
+        {
+            base.ViewDidLoad ();
 
-			View.BackgroundColor = UIColor.White;
+            View.BackgroundColor = UIColor.White;
 
-			initSignInButtons ();
-		}
-
-
-		public override void ViewDidAppear (bool animated)
-		{
-			base.ViewDidAppear (animated);
-
-			connectSignInButtonHandlers ();
-		}
+            initSignInButtons ();
+        }
 
 
-		public override void ViewDidDisappear (bool animated)
-		{
-			disconnectSignInButtonHandlers ();
+        public override void ViewDidAppear (bool animated)
+        {
+            base.ViewDidAppear (animated);
 
-			base.ViewDidDisappear (animated);
-		}
+            connectSignInButtonHandlers ();
+        }
 
 
-		void initSignInButtons ()
-		{
-			var stackView = new UIStackView
-			{
-				TranslatesAutoresizingMaskIntoConstraints = false,
-				Axis = UILayoutConstraintAxis.Vertical,
-				Spacing = 10,
-				Alignment = UIStackViewAlignment.Fill,
-				Distribution = UIStackViewDistribution.FillEqually
-			};
+        public override void ViewDidDisappear (bool animated)
+        {
+            disconnectSignInButtonHandlers ();
 
-			View.AddSubview (stackView);
+            base.ViewDidDisappear (animated);
+        }
+
+
+        void initSignInButtons ()
+        {
+            var stackView = new UIStackView
+            {
+                TranslatesAutoresizingMaskIntoConstraints = false,
+                Axis = UILayoutConstraintAxis.Vertical,
+                Spacing = 10,
+                Alignment = UIStackViewAlignment.Fill,
+                Distribution = UIStackViewDistribution.FillEqually
+            };
+
+            View.AddSubview (stackView);
 
 #if NC_AUTH_GOOGLE
 
@@ -132,12 +132,12 @@ namespace NomadCode.ClientAuth
 
 #endif
 
-			stackView.ConstrainToParentCenter (220, stackView.ArrangedSubviews.Length * 45);
-		}
+            stackView.ConstrainToParentCenter (220, stackView.ArrangedSubviews.Length * 45);
+        }
 
 
 
-#region SignInButton Click Handlers
+        #region SignInButton Click Handlers
 
 #if NC_AUTH_GOOGLE
 
@@ -195,35 +195,35 @@ namespace NomadCode.ClientAuth
 
 #endif
 
-		void showNotImplementedAlert (string providerName)
-		{
-			var alert = UIAlertController.Create ("Bummer", $"Looks like this lazy developer hasn't implemented {providerName} auth yet.", UIAlertControllerStyle.Alert);
+        void showNotImplementedAlert (string providerName)
+        {
+            var alert = UIAlertController.Create ("Bummer", $"Looks like this lazy developer hasn't implemented {providerName} auth yet.", UIAlertControllerStyle.Alert);
 
-			alert.AddAction (UIAlertAction.Create ("Complain", UIAlertActionStyle.Destructive, handleComplainAction));
-			alert.AddAction (UIAlertAction.Create ("Whatever", UIAlertActionStyle.Default, handleComplainAction));
+            alert.AddAction (UIAlertAction.Create ("Complain", UIAlertActionStyle.Destructive, handleComplainAction));
+            alert.AddAction (UIAlertAction.Create ("Whatever", UIAlertActionStyle.Default, handleComplainAction));
 
-			PresentViewController (alert, true, null);
+            PresentViewController (alert, true, null);
 
-			void handleComplainAction (UIAlertAction action)
-			{
-				if (action.Title == "Complain")
-				{
-					var issueUrl = @"https://github.com/colbylwilliams/NomadCode.ClientAuth/issues/new";
+            void handleComplainAction (UIAlertAction action)
+            {
+                if (action.Title == "Complain")
+                {
+                    var issueUrl = @"https://github.com/colbylwilliams/NomadCode.ClientAuth/issues/new";
 
-					UIApplication.SharedApplication.OpenUrl (new NSUrl (issueUrl));
+                    UIApplication.SharedApplication.OpenUrl (new NSUrl (issueUrl));
 
-					// DismissViewController (true, null;
-				}
-				else if (action.Title == "Whatever")
-				{
-					//DismissViewController (true, null);
-				}
-			}
-		}
+                    // DismissViewController (true, null;
+                }
+                else if (action.Title == "Whatever")
+                {
+                    //DismissViewController (true, null);
+                }
+            }
+        }
 
 
-		void connectSignInButtonHandlers ()
-		{
+        void connectSignInButtonHandlers ()
+        {
 #if NC_AUTH_GOOGLE
 			AuthButtonGoogle.TouchUpInside += handleAuthButtonGoogleClicked;
 #endif
@@ -236,11 +236,11 @@ namespace NomadCode.ClientAuth
 #if NC_AUTH_TWITTER
 			AuthButtonTwitter.TouchUpInside += handleAuthButtonTwitterClicked;
 #endif
-		}
+        }
 
 
-		void disconnectSignInButtonHandlers ()
-		{
+        void disconnectSignInButtonHandlers ()
+        {
 #if NC_AUTH_GOOGLE
 			AuthButtonGoogle.TouchUpInside -= handleAuthButtonGoogleClicked;
 #endif
@@ -253,14 +253,14 @@ namespace NomadCode.ClientAuth
 #if NC_AUTH_TWITTER
 			AuthButtonTwitter.TouchUpInside -= handleAuthButtonTwitterClicked;
 #endif
-		}
+        }
 
-#endregion
+        #endregion
 
 
 #if NC_AUTH_GOOGLE
 
-#region ISignInDelegate
+        #region ISignInDelegate
 
 		public void DidSignIn (SignIn signIn, GoogleUser user, NSError error)
 		{
@@ -308,10 +308,10 @@ namespace NomadCode.ClientAuth
 			// Perform any operations when the user disconnects from app here.
 		}
 
-#endregion
+        #endregion
 
 #endif
-	}
+    }
 }
 
 #endif
