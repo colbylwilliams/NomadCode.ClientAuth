@@ -9,7 +9,6 @@
     <Import_RootNamespace>NomadCode.ClientAuth</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)ClientAuthManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Keychain.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Log.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ClientAuthProvider.cs" />
@@ -21,9 +20,15 @@
     <Compile Include="$(MSBuildThisFileDirectory)UI iOS\AuthViewController.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI iOS\SignInButton.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI iOS\ViewExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ClientAuthManager\ClientAuthManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ClientAuthManager\ClientAuthManager_Facebook.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ClientAuthManager\ClientAuthManager_Google.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ClientAuthManager\ClientAuthManager_Microsoft.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ClientAuthManager\ClientAuthManager_Twitter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)UI iOS\" />
     <Folder Include="$(MSBuildThisFileDirectory)UI Android\" />
+    <Folder Include="$(MSBuildThisFileDirectory)ClientAuthManager\" />
   </ItemGroup>
 </Project>

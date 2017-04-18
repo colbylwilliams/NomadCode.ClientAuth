@@ -1,43 +1,15 @@
-﻿#define NC_AUTH_GOOGLE
-#define NC_AUTH_FACEBOOK
-#define NC_AUTH_MICROSOFT
-#define NC_AUTH_TWITTER
+﻿//#define NC_AUTH_GOOGLE
+//#define NC_AUTH_FACEBOOK
+//#define NC_AUTH_MICROSOFT
+//#define NC_AUTH_TWITTER
 
 using System;
 
 #if __IOS__
-
 using UIKit;
 using Foundation;
-
-#if NC_AUTH_GOOGLE
-using Google.SignIn;
-#endif
-#if NC_AUTH_FACEBOOK
-using Facebook.CoreKit;
-#endif
-#if NC_AUTH_MICROSOFT
-#endif
-#if NC_AUTH_TWITTER
-#endif
-
 #elif __ANDROID__
 using Android.Support.V4.App;
-using Android.Content;
-
-#if NC_AUTH_GOOGLE
-using Android.Gms.Auth.Api;
-using Android.Gms.Auth.Api.SignIn;
-using Android.Gms.Common;
-using Android.Gms.Common.Apis;
-#endif
-#if NC_AUTH_FACEBOOK
-#endif
-#if NC_AUTH_MICROSOFT
-#endif
-#if NC_AUTH_TWITTER
-#endif
-
 #endif
 
 namespace NomadCode.ClientAuth
@@ -105,20 +77,8 @@ namespace NomadCode.ClientAuth
 
         public void InitializeAuthProviders (UIApplication application, NSDictionary launchOptions)
         {
-#if NC_AUTH_GOOGLE
-			var googleServiceDictionary = NSDictionary.FromFile ("GoogleService-Info.plist");
-
-			if (googleServiceDictionary == null)
-			{
-				throw new System.IO.FileNotFoundException ("Must be present to use Google Auth", "GoogleService-Info.plist");
-			}
-
-			SignIn.SharedInstance.ClientID = googleServiceDictionary ["CLIENT_ID"].ToString ();
-			SignIn.SharedInstance.ServerClientID = googleServiceDictionary ["SERVER_CLIENT_ID"].ToString ();
-#endif
-#if NC_AUTH_FACEBOOK
-			ApplicationDelegate.SharedInstance.FinishedLaunching (application, launchOptions);
-#endif
+            initializeAuthProviderGoogle ();
+            initializeAuthProviderFacebook (application, launchOptions);
         }
 
 
@@ -126,52 +86,21 @@ namespace NomadCode.ClientAuth
         {
             var openUrlOptions = new UIApplicationOpenUrlOptions (options);
 
-            var opened = false;
-#if NC_AUTH_GOOGLE
-			opened = SignIn.SharedInstance.HandleUrl (url, openUrlOptions.SourceApplication, openUrlOptions.Annotation);
-
-#endif
-#if NC_AUTH_FACEBOOK
-			if (opened)
-			{
-				opened = ApplicationDelegate.SharedInstance.OpenUrl (app, url, openUrlOptions.SourceApplication, openUrlOptions.Annotation);
-			}
-#endif
-            return opened;
-
-            //return base.OpenUrl(app, url, options);
+            return openUrlGoogle (app, url, openUrlOptions) || openUrlFacebook (app, url, openUrlOptions);
         }
 
 #elif __ANDROID__
 
-#if NC_AUTH_GOOGLE
-        GoogleApiClient googleApiClient;
+        public int AuthActivityLayoutResId { get; set; }
 
-        public Intent GetSignInIntent () => Auth.GoogleSignInApi.GetSignInIntent (googleApiClient);
-
-        public (int WebClientResId, int LoginActivityLayoutResId, int GoogleButtonResId) LoginResources { get; set; }
-#endif
 
         public void InitializeAuthProviders<T> (T context)
             where T : FragmentActivity
 #if NC_AUTH_GOOGLE
-                , GoogleApiClient.IOnConnectionFailedListener
+                , Android.Gms.Common.Apis.GoogleApiClient.IOnConnectionFailedListener
 #endif
         {
-#if NC_AUTH_GOOGLE
-            var webClientId = context.GetString (LoginResources.WebClientResId);
-
-            GoogleSignInOptions gso = new GoogleSignInOptions.Builder (GoogleSignInOptions.DefaultSignIn)
-                                                             .RequestEmail ()
-                                                             .RequestIdToken (webClientId)
-                                                             .RequestServerAuthCode (webClientId)
-                                                             .Build ();
-
-            googleApiClient = new GoogleApiClient.Builder (context)
-                                                 .EnableAutoManage (context, context)
-                                                 .AddApi (Auth.GOOGLE_SIGN_IN_API, gso)
-                                                 .Build ();
-#endif
+            initializeAuthProviderGoogle (context);
         }
 #endif
 

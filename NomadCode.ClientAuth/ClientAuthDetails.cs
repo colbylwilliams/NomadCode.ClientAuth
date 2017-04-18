@@ -1,5 +1,4 @@
-﻿
-namespace NomadCode.ClientAuth
+﻿namespace NomadCode.ClientAuth
 {
     public class ClientAuthDetails
     {

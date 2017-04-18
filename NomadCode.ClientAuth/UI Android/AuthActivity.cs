@@ -35,7 +35,7 @@ namespace NomadCode.ClientAuth
         {
             base.OnCreate (savedInstanceState);
 
-            SetContentView (ClientAuthManager.Shared.LoginResources.LoginActivityLayoutResId);
+            SetContentView (ClientAuthManager.Shared.AuthActivityLayoutResId);
 
             // use this format to help users set up the app
             //if (GetString (Resource.String.google_app_id) == "YOUR-APP-ID")
@@ -43,7 +43,7 @@ namespace NomadCode.ClientAuth
 #if NC_AUTH_GOOGLE
             ClientAuthManager.Shared.InitializeAuthProviders (this);
 
-            FindViewById<SignInButton> (ClientAuthManager.Shared.LoginResources.GoogleButtonResId).SetOnClickListener (this);
+            FindViewById<SignInButton> (ClientAuthManager.Shared.GoogleButtonResId).SetOnClickListener (this);
 #endif
         }
 
@@ -51,7 +51,7 @@ namespace NomadCode.ClientAuth
         public void OnClick (View v)
         {
 #if NC_AUTH_GOOGLE
-            if (v.Id == ClientAuthManager.Shared.LoginResources.GoogleButtonResId)
+            if (v.Id == ClientAuthManager.Shared.GoogleButtonResId)
             {
                 signIn ();
             }
