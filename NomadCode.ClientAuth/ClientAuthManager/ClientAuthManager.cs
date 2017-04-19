@@ -45,21 +45,12 @@ namespace NomadCode.ClientAuth
                 {
                     if (provider.HasValue)
                     {
-                        removeItemFromKeychain (KeychainServiceName (provider.Value, ClientAuthDetailTypes.Name));
-                        removeItemFromKeychain (KeychainServiceName (provider.Value, ClientAuthDetailTypes.Username));
-                        removeItemFromKeychain (KeychainServiceName (provider.Value, ClientAuthDetailTypes.Email));
-                        removeItemFromKeychain (KeychainServiceName (provider.Value, ClientAuthDetailTypes.AuthCode));
-                        removeItemFromKeychain (KeychainServiceName (provider.Value, ClientAuthDetailTypes.AvatarUrl));
+                        removeProviderKeychainData (provider.Value);
                     }
                 }
                 else
                 {
-                    if (!string.IsNullOrEmpty (_clientAuthDetails.Token)) saveItemToKeychain (KeychainServiceName (_clientAuthDetails.ClientAuthProvider, ClientAuthDetailTypes.Token), ClientAuthDetailTypes.Token.ToString (), _clientAuthDetails.Token);
-                    if (!string.IsNullOrEmpty (_clientAuthDetails.Name)) saveItemToKeychain (KeychainServiceName (_clientAuthDetails.ClientAuthProvider, ClientAuthDetailTypes.Name), ClientAuthDetailTypes.Name.ToString (), _clientAuthDetails.Name);
-                    if (!string.IsNullOrEmpty (_clientAuthDetails.Username)) saveItemToKeychain (KeychainServiceName (_clientAuthDetails.ClientAuthProvider, ClientAuthDetailTypes.Username), ClientAuthDetailTypes.Username.ToString (), _clientAuthDetails.Username);
-                    if (!string.IsNullOrEmpty (_clientAuthDetails.Email)) saveItemToKeychain (KeychainServiceName (_clientAuthDetails.ClientAuthProvider, ClientAuthDetailTypes.Email), ClientAuthDetailTypes.Email.ToString (), _clientAuthDetails.Email);
-                    if (!string.IsNullOrEmpty (_clientAuthDetails.AuthCode)) saveItemToKeychain (KeychainServiceName (_clientAuthDetails.ClientAuthProvider, ClientAuthDetailTypes.AuthCode), ClientAuthDetailTypes.AuthCode.ToString (), _clientAuthDetails.AuthCode);
-                    if (!string.IsNullOrEmpty (_clientAuthDetails.AvatarUrl)) saveItemToKeychain (KeychainServiceName (_clientAuthDetails.ClientAuthProvider, ClientAuthDetailTypes.AvatarUrl), ClientAuthDetailTypes.AvatarUrl.ToString (), _clientAuthDetails.AvatarUrl);
+                    saveClientAuthDetailsToKeychain (_clientAuthDetails);
                 }
             }
         }
@@ -72,6 +63,42 @@ namespace NomadCode.ClientAuth
             AthorizationChanged?.Invoke (this, ClientAuthDetails);
         }
 
+
+        public void LogoutAuthProviders ()
+        {
+            logoutAuthProviderGoogle ();
+            logoutAuthProviderFacebook ();
+            logoutAuthProviderMicrosoft ();
+            logoutAuthProviderTwitter ();
+
+            var providers = new [] { ClientAuthProviders.Google, ClientAuthProviders.Facebook, ClientAuthProviders.Microsoft, ClientAuthProviders.Twitter };
+
+            foreach (var provider in providers)
+            {
+                removeProviderKeychainData (provider);
+            }
+        }
+
+
+        void removeProviderKeychainData (ClientAuthProviders provider)
+        {
+            removeItemFromKeychain (KeychainServiceName (provider, ClientAuthDetailTypes.Token));
+            removeItemFromKeychain (KeychainServiceName (provider, ClientAuthDetailTypes.Name));
+            removeItemFromKeychain (KeychainServiceName (provider, ClientAuthDetailTypes.Username));
+            removeItemFromKeychain (KeychainServiceName (provider, ClientAuthDetailTypes.Email));
+            removeItemFromKeychain (KeychainServiceName (provider, ClientAuthDetailTypes.AuthCode));
+            removeItemFromKeychain (KeychainServiceName (provider, ClientAuthDetailTypes.AvatarUrl));
+        }
+
+        void saveClientAuthDetailsToKeychain (ClientAuthDetails details)
+        {
+            if (!string.IsNullOrEmpty (details?.Token)) saveItemToKeychain (KeychainServiceName (details.ClientAuthProvider, ClientAuthDetailTypes.Token), ClientAuthDetailTypes.Token.ToString (), details.Token);
+            if (!string.IsNullOrEmpty (details?.Name)) saveItemToKeychain (KeychainServiceName (details.ClientAuthProvider, ClientAuthDetailTypes.Name), ClientAuthDetailTypes.Name.ToString (), details.Name);
+            if (!string.IsNullOrEmpty (details?.Username)) saveItemToKeychain (KeychainServiceName (details.ClientAuthProvider, ClientAuthDetailTypes.Username), ClientAuthDetailTypes.Username.ToString (), details.Username);
+            if (!string.IsNullOrEmpty (details?.Email)) saveItemToKeychain (KeychainServiceName (details.ClientAuthProvider, ClientAuthDetailTypes.Email), ClientAuthDetailTypes.Email.ToString (), details.Email);
+            if (!string.IsNullOrEmpty (details?.AuthCode)) saveItemToKeychain (KeychainServiceName (details.ClientAuthProvider, ClientAuthDetailTypes.AuthCode), ClientAuthDetailTypes.AuthCode.ToString (), details.AuthCode);
+            if (!string.IsNullOrEmpty (details?.AvatarUrl)) saveItemToKeychain (KeychainServiceName (details.ClientAuthProvider, ClientAuthDetailTypes.AvatarUrl), ClientAuthDetailTypes.AvatarUrl.ToString (), details.AvatarUrl);
+        }
 
 #if __IOS__
 
@@ -102,6 +129,7 @@ namespace NomadCode.ClientAuth
         {
             initializeAuthProviderGoogle (context);
         }
+
 #endif
 
 

@@ -7,93 +7,93 @@ using UIKit;
 
 namespace NomadCode.ClientAuth
 {
-	public class SignInButton : UIButton
-	{
-		//Corner radius of the button.
-		static nfloat cornerRadius = 2.0f;
+    public class SignInButton : UIButton
+    {
+        //Corner radius of the button.
+        static nfloat cornerRadius = 2.0f;
 
-		//Opacity of the drop shadow of the button.
-		static float dropShadowAlpha = 0.24f;
+        //Opacity of the drop shadow of the button.
+        static float dropShadowAlpha = 0.24f;
 
-		//Radius of the drop shadow of the button.
-		static nfloat dropShadowRadius = 2.0f;
+        //Radius of the drop shadow of the button.
+        static nfloat dropShadowRadius = 2.0f;
 
-		//Vertical offset of the drop shadow of the button.
-		static nfloat dropShadowYOffset = 2.0f;
+        //Vertical offset of the drop shadow of the button.
+        static nfloat dropShadowYOffset = 2.0f;
 
-		//Button text font size.
-		static nfloat fontSize = 13.0f;
+        //Button text font size.
+        static nfloat fontSize = 15.0f;
 
-		//UIColor textColor;
-		//UIColor backgroundColor;
-		//UIImage image;
+        //UIColor textColor;
+        //UIColor backgroundColor;
+        //UIImage image;
 
-		public SignInButton ()
-		{
-			commonInit ();
-		}
+        public SignInButton ()
+        {
+            commonInit ();
+        }
 
-		public SignInButton (IntPtr handle) : base (handle)
-		{
-			commonInit ();
-		}
-
-
-		void commonInit ()
-		{
-			var text = "";
-			SetTitle (text, UIControlState.Normal);
-			//BackgroundColor = backgroundColor;
-			//SetTitleColor (textColor, UIControlState.Normal);
-			//SetImage (image, UIControlState.Normal);
-			TitleLabel.Font = UIFont.BoldSystemFontOfSize (fontSize);
-
-			Layer.CornerRadius = cornerRadius;
-
-			// Add a drop shadow.
-			Layer.MasksToBounds = false;
-			Layer.ShadowColor = UIColor.Black.CGColor;
-			Layer.ShadowOpacity = dropShadowAlpha;
-			Layer.ShadowRadius = dropShadowRadius;
-			Layer.ShadowOffset = new CGSize (0, dropShadowYOffset);
-
-			AdjustsImageWhenHighlighted = false;
-		}
+        public SignInButton (IntPtr handle) : base (handle)
+        {
+            commonInit ();
+        }
 
 
-		public override void AwakeFromNib ()
-		{
-			base.AwakeFromNib ();
+        void commonInit ()
+        {
+            var text = "";
+            SetTitle (text, UIControlState.Normal);
+            //BackgroundColor = backgroundColor;
+            //SetTitleColor (textColor, UIControlState.Normal);
+            //SetImage (image, UIControlState.Normal);
+            TitleLabel.Font = UIFont.BoldSystemFontOfSize (fontSize);
 
-			//var authProvider = ClientAuthProvider.FromTag (Tag);
+            Layer.CornerRadius = cornerRadius;
 
-			//SetImage (authProvider.Icon, UIControlState.Normal);
-			//SetTitle (authProvider.SignInLabel, UIControlState.Normal);
-			//BackgroundColor = authProvider.ButtonBackgroundColor;
-			//SetTitleColor (authProvider.ButtonTextColor, UIControlState.Normal);
-		}
+            // Add a drop shadow.
+            Layer.MasksToBounds = false;
+            Layer.ShadowColor = UIColor.Black.CGColor;
+            Layer.ShadowOpacity = dropShadowAlpha;
+            Layer.ShadowRadius = dropShadowRadius;
+            Layer.ShadowOffset = new CGSize (0, dropShadowYOffset);
+
+            AdjustsImageWhenHighlighted = false;
+        }
 
 
-		public override void LayoutSubviews ()
-		{
-			var authProvider = ClientAuthProviderExtensions.FromTag (Tag);
+        public override void AwakeFromNib ()
+        {
+            base.AwakeFromNib ();
 
-			SetImage (authProvider.Icon, UIControlState.Normal);
-			SetTitle (authProvider.SignInLabel, UIControlState.Normal);
-			BackgroundColor = authProvider.ButtonBackgroundColor;
-			SetTitleColor (authProvider.ButtonTextColor, UIControlState.Normal);
+            //var authProvider = ClientAuthProvider.FromTag (Tag);
 
-			base.LayoutSubviews ();
+            //SetImage (authProvider.Icon, UIControlState.Normal);
+            //SetTitle (authProvider.SignInLabel, UIControlState.Normal);
+            //BackgroundColor = authProvider.ButtonBackgroundColor;
+            //SetTitleColor (authProvider.ButtonTextColor, UIControlState.Normal);
+        }
 
-			CGRect imageRect = ImageView.Frame;
-			imageRect.X = 8.0f;
-			ImageView.Frame = imageRect;
 
-			CGRect titleRect = TitleLabel.Frame;
-			titleRect.X = 50.0f;
-			TitleLabel.Frame = titleRect;
-		}
-	}
+        public override void LayoutSubviews ()
+        {
+            var authProvider = ClientAuthProviderExtensions.FromTag (Tag);
+
+            SetImage (authProvider.Icon, UIControlState.Normal);
+            SetTitle (authProvider.SignInLabel, UIControlState.Normal);
+            BackgroundColor = authProvider.ButtonBackgroundColor;
+            SetTitleColor (authProvider.ButtonTextColor, UIControlState.Normal);
+
+            base.LayoutSubviews ();
+
+            CGRect imageRect = ImageView.Frame;
+            imageRect.X = 8.0f;
+            ImageView.Frame = imageRect;
+
+            CGRect titleRect = TitleLabel.Frame;
+            titleRect.X = 50.0f;
+            TitleLabel.Frame = titleRect;
+        }
+    }
 }
 
 #endif

@@ -38,7 +38,7 @@ namespace NomadCode.ClientAuth
 {
     public class AuthViewController : UIViewController
 #if NC_AUTH_GOOGLE
-	, ISignInDelegate, ISignInUIDelegate
+    , ISignInDelegate, ISignInUIDelegate
 #endif
     {
         SignInButton _authButtonGoogle, _authButtonMicrosoft, _authButtonTwitter, _authButtonFacebook;
@@ -58,7 +58,7 @@ namespace NomadCode.ClientAuth
         {
             base.ViewDidLoad ();
 
-            View.BackgroundColor = UIColor.White;
+            View.BackgroundColor = UIColor.GroupTableViewBackgroundColor;
 
             initSignInButtons ();
         }
@@ -95,44 +95,44 @@ namespace NomadCode.ClientAuth
 
 #if NC_AUTH_GOOGLE
 
-			stackView.AddArrangedSubview (AuthButtonGoogle);
+            stackView.AddArrangedSubview (AuthButtonGoogle);
 
-			SignIn.SharedInstance.UIDelegate = this;
-			SignIn.SharedInstance.Delegate = this;
+            SignIn.SharedInstance.UIDelegate = this;
+            SignIn.SharedInstance.Delegate = this;
 
-			// Uncomment to automatically sign in the user.
-			SignIn.SharedInstance.SignInUserSilently ();
+            // Uncomment to automatically sign in the user.
+            SignIn.SharedInstance.SignInUserSilently ();
 
-			// Uncomment to automatically sign out the user.
-			// SignIn.SharedInstance.SignOutUser ();
+            // Uncomment to automatically sign out the user.
+            // SignIn.SharedInstance.SignOutUser ();
 #endif
 #if NC_AUTH_FACEBOOK
 
-			stackView.AddArrangedSubview (AuthButtonFacebook);
+            stackView.AddArrangedSubview (AuthButtonFacebook);
 
-			if (AccessToken.CurrentAccessToken != null)
-			{
-				// User is logged in, do work such as go to next view controller.
-				Log.Debug ($"Facebook Current Access Token: {AccessToken.CurrentAccessToken}");
-			}
-			else
-			{
-				Log.Debug ($"Facebook Current Access Token: null");
-			}
+            if (AccessToken.CurrentAccessToken != null)
+            {
+                // User is logged in, do work such as go to next view controller.
+                Log.Debug ($"Facebook Current Access Token: {AccessToken.CurrentAccessToken}");
+            }
+            else
+            {
+                Log.Debug ($"Facebook Current Access Token: null");
+            }
 
 #endif
 #if NC_AUTH_MICROSOFT
 
-			stackView.AddArrangedSubview (AuthButtonMicrosoft);
+            stackView.AddArrangedSubview (AuthButtonMicrosoft);
 
 #endif
 #if NC_AUTH_TWITTER
 
-			stackView.AddArrangedSubview (AuthButtonTwitter);
+            stackView.AddArrangedSubview (AuthButtonTwitter);
 
 #endif
 
-            stackView.ConstrainToParentCenter (220, stackView.ArrangedSubviews.Length * 45);
+            stackView.ConstrainToParentCenter (240, stackView.ArrangedSubviews.Length * 52);
         }
 
 
@@ -141,57 +141,57 @@ namespace NomadCode.ClientAuth
 
 #if NC_AUTH_GOOGLE
 
-		void handleAuthButtonGoogleClicked (object s, EventArgs e)
-		{
-			SignIn.SharedInstance.SignInUser ();
-		}
+        void handleAuthButtonGoogleClicked (object s, EventArgs e)
+        {
+            SignIn.SharedInstance.SignInUser ();
+        }
 
 #endif
 
 #if NC_AUTH_FACEBOOK
 
-		void handleAuthButtonFacebookClicked (object s, EventArgs e)
-		{
-			var readPermissions = new string [] { @"public_profile", @"email"/*, @"user_friends"*/};
+        void handleAuthButtonFacebookClicked (object s, EventArgs e)
+        {
+            var readPermissions = new string [] { @"public_profile", @"email"/*, @"user_friends"*/};
 
-			var loginManager = new LoginManager ();
+            var loginManager = new LoginManager ();
 
-			loginManager.LogInWithReadPermissions (readPermissions, this, (LoginManagerLoginResult result, NSError error) =>
-			{
-				if (error != null)
-				{
-					Log.Error ($"Facebook Login Failed: Code: {error.Code}, Description: {error.LocalizedDescription}");
-				}
-				else if (result.IsCancelled)
-				{
-					Log.Debug ("Facebook Login Failed: Cancelled");
-				}
-				else
-				{
-					Log.Debug ($"Facebook Login Success: Token: {result.Token}");
+            loginManager.LogInWithReadPermissions (readPermissions, this, (LoginManagerLoginResult result, NSError error) =>
+            {
+                if (error != null)
+                {
+                    Log.Error ($"Facebook Login Failed: Code: {error.Code}, Description: {error.LocalizedDescription}");
+                }
+                else if (result.IsCancelled)
+                {
+                    Log.Debug ("Facebook Login Failed: Cancelled");
+                }
+                else
+                {
+                    Log.Debug ($"Facebook Login Success: Token: {result.Token}");
 
-					DismissViewController (true, null);
-				}
-			});
-		}
+                    DismissViewController (true, null);
+                }
+            });
+        }
 
 #endif
 
 #if NC_AUTH_MICROSOFT
 
-		void handleAuthButtonMicrosoftClicked (object s, EventArgs e)
-		{
-			showNotImplementedAlert ("Microsoft");
-		}
+        void handleAuthButtonMicrosoftClicked (object s, EventArgs e)
+        {
+            showNotImplementedAlert ("Microsoft");
+        }
 
 #endif
 
 #if NC_AUTH_TWITTER
 
-		void handleAuthButtonTwitterClicked (object s, EventArgs e)
-		{
-			showNotImplementedAlert ("Twitter");
-		}
+        void handleAuthButtonTwitterClicked (object s, EventArgs e)
+        {
+            showNotImplementedAlert ("Twitter");
+        }
 
 #endif
 
@@ -225,16 +225,16 @@ namespace NomadCode.ClientAuth
         void connectSignInButtonHandlers ()
         {
 #if NC_AUTH_GOOGLE
-			AuthButtonGoogle.TouchUpInside += handleAuthButtonGoogleClicked;
+            AuthButtonGoogle.TouchUpInside += handleAuthButtonGoogleClicked;
 #endif
 #if NC_AUTH_FACEBOOK
-			AuthButtonFacebook.TouchUpInside += handleAuthButtonFacebookClicked;
+            AuthButtonFacebook.TouchUpInside += handleAuthButtonFacebookClicked;
 #endif
 #if NC_AUTH_MICROSOFT
-			AuthButtonMicrosoft.TouchUpInside += handleAuthButtonMicrosoftClicked;
+            AuthButtonMicrosoft.TouchUpInside += handleAuthButtonMicrosoftClicked;
 #endif
 #if NC_AUTH_TWITTER
-			AuthButtonTwitter.TouchUpInside += handleAuthButtonTwitterClicked;
+            AuthButtonTwitter.TouchUpInside += handleAuthButtonTwitterClicked;
 #endif
         }
 
@@ -242,16 +242,16 @@ namespace NomadCode.ClientAuth
         void disconnectSignInButtonHandlers ()
         {
 #if NC_AUTH_GOOGLE
-			AuthButtonGoogle.TouchUpInside -= handleAuthButtonGoogleClicked;
+            AuthButtonGoogle.TouchUpInside -= handleAuthButtonGoogleClicked;
 #endif
 #if NC_AUTH_FACEBOOK
-			AuthButtonFacebook.TouchUpInside -= handleAuthButtonFacebookClicked;
+            AuthButtonFacebook.TouchUpInside -= handleAuthButtonFacebookClicked;
 #endif
 #if NC_AUTH_MICROSOFT
-			AuthButtonMicrosoft.TouchUpInside -= handleAuthButtonMicrosoftClicked;
+            AuthButtonMicrosoft.TouchUpInside -= handleAuthButtonMicrosoftClicked;
 #endif
 #if NC_AUTH_TWITTER
-			AuthButtonTwitter.TouchUpInside -= handleAuthButtonTwitterClicked;
+            AuthButtonTwitter.TouchUpInside -= handleAuthButtonTwitterClicked;
 #endif
         }
 
@@ -262,51 +262,51 @@ namespace NomadCode.ClientAuth
 
         #region ISignInDelegate
 
-		public void DidSignIn (SignIn signIn, GoogleUser user, NSError error)
-		{
-			if (error == null && user != null)
-			{
-				// Perform any operations on signed in user here.
-				var userId = user.UserID;                  // For client-side use only!
-				var idToken = user.Authentication.IdToken; // Safe to send to the server
-				var accessToken = user.Authentication.AccessToken;
-				var serverAuth = user.ServerAuthCode;
-				var fullName = user.Profile.Name;
-				var givenName = user.Profile.GivenName;
-				var familyName = user.Profile.FamilyName;
-				var email = user.Profile.Email;
-				var imageUrl = user.Profile.GetImageUrl (64);
-				// ...;
-				Log.Debug ($"\n\tuserId: {userId},\n\tidToken: {idToken},\n\taccessToken: {accessToken},\n\tserverAuth: {serverAuth},\n\tfullName: {fullName},\n\tgivenName: {givenName},\n\tfamilyName: {familyName},\n\temail: {email},\n\timageUrl: {imageUrl},\n\t");
+        public void DidSignIn (SignIn signIn, GoogleUser user, NSError error)
+        {
+            if (error == null && user != null)
+            {
+                // Perform any operations on signed in user here.
+                var userId = user.UserID;                  // For client-side use only!
+                var idToken = user.Authentication.IdToken; // Safe to send to the server
+                var accessToken = user.Authentication.AccessToken;
+                var serverAuth = user.ServerAuthCode;
+                var fullName = user.Profile.Name;
+                var givenName = user.Profile.GivenName;
+                var familyName = user.Profile.FamilyName;
+                var email = user.Profile.Email;
+                var imageUrl = user.Profile.GetImageUrl (64);
+                // ...;
+                Log.Debug ($"\n\tuserId: {userId},\n\tidToken: {idToken},\n\taccessToken: {accessToken},\n\tserverAuth: {serverAuth},\n\tfullName: {fullName},\n\tgivenName: {givenName},\n\tfamilyName: {familyName},\n\temail: {email},\n\timageUrl: {imageUrl},\n\t");
 
-				var details = new ClientAuthDetails
-				{
-					ClientAuthProvider = ClientAuthProviders.Google,
-					Username = user.Profile?.Name,
-					Email = user.Profile?.Email,
-					Token = user.Authentication?.IdToken,
-					AuthCode = user.ServerAuthCode,
-					AvatarUrl = user.Profile.GetImageUrl (AvatarSize * (nuint)UIScreen.MainScreen.Scale)?.ToString ()
-				};
+                var details = new ClientAuthDetails
+                {
+                    ClientAuthProvider = ClientAuthProviders.Google,
+                    Username = user.Profile?.Name,
+                    Email = user.Profile?.Email,
+                    Token = user.Authentication?.IdToken,
+                    AuthCode = user.ServerAuthCode,
+                    AvatarUrl = user.Profile.GetImageUrl (AvatarSize * (nuint)UIScreen.MainScreen.Scale)?.ToString ()
+                };
 
-				ClientAuthManager.Shared.SetClientAuthDetails (details);
+                ClientAuthManager.Shared.SetClientAuthDetails (details);
 
-				DismissViewController (true, null);
-			}
-			else
-			{
-				Log.Error (error?.LocalizedDescription);
-			}
-		}
+                DismissViewController (true, null);
+            }
+            else
+            {
+                Log.Error (error?.LocalizedDescription);
+            }
+        }
 
 
-		[Export ("signIn:didDisconnectWithUser:withError:")]
-		public void DidDisconnect (SignIn signIn, GoogleUser user, NSError error)
-		{
-			Log.Debug ("Google User DidDisconnect");
+        [Export ("signIn:didDisconnectWithUser:withError:")]
+        public void DidDisconnect (SignIn signIn, GoogleUser user, NSError error)
+        {
+            Log.Debug ("Google User DidDisconnect");
 
-			// Perform any operations when the user disconnects from app here.
-		}
+            // Perform any operations when the user disconnects from app here.
+        }
 
         #endregion
 

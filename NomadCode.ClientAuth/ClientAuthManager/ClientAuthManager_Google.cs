@@ -46,10 +46,17 @@ namespace NomadCode.ClientAuth
             return SignIn.SharedInstance.HandleUrl (url, openUrlOptions.SourceApplication, openUrlOptions.Annotation);
         }
 
+        void logoutAuthProviderGoogle ()
+        {
+            SignIn.SharedInstance.SignOutUser ();
+        }
+
 #else
         void initializeAuthProviderGoogle ();
 
         bool openUrlGoogle (UIApplication app, NSUrl url, UIApplicationOpenUrlOptions openUrlOptions) => false;
+
+        void logoutAuthProviderGoogle () { }
 #endif
 
 
@@ -82,8 +89,11 @@ namespace NomadCode.ClientAuth
                                                  .Build ();
         }
 
+        void logoutAuthProviderGoogle () { }
 #else
         void initializeAuthProviderGoogle<T> (T context) where T : FragmentActivity { }
+
+        void logoutAuthProviderGoogle () { }
 #endif
 
 #endif

@@ -34,10 +34,13 @@ namespace NomadCode.ClientAuth
             return ApplicationDelegate.SharedInstance.OpenUrl (app, url, openUrlOptions.SourceApplication, openUrlOptions.Annotation);
         }
 
+        void logoutAuthProviderFacebook () { }
 #else
         void initializeAuthProviderFacebook ();
 
         bool openUrlFacebook (UIApplication app, NSUrl url, UIApplicationOpenUrlOptions openUrlOptions) => false;
+
+        void logoutAuthProviderFacebook () { }
 #endif
 
 
@@ -45,8 +48,10 @@ namespace NomadCode.ClientAuth
 
 #if NC_AUTH_GOOGLE
 
+        void logoutAuthProviderFacebook () { }
 #else
 
+		void logoutAuthProviderFacebook () { }
 #endif
 
 #endif
