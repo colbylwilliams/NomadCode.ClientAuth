@@ -204,6 +204,7 @@ namespace NomadCode.ClientAuth
 
             PresentViewController (alert, true, null);
 
+#if !MOBILE_CENTER_BUILD
             void handleComplainAction (UIAlertAction action)
             {
                 if (action.Title == "Complain")
@@ -219,8 +220,27 @@ namespace NomadCode.ClientAuth
                     //DismissViewController (true, null);
                 }
             }
+#endif
         }
 
+
+#if MOBILE_CENTER_BUILD
+        void handleComplainAction (UIAlertAction action)
+        {
+            if (action.Title == "Complain")
+            {
+                var issueUrl = @"https://github.com/colbylwilliams/NomadCode.ClientAuth/issues/new";
+
+                UIApplication.SharedApplication.OpenUrl (new NSUrl (issueUrl));
+
+                // DismissViewController (true, null;
+            }
+            else if (action.Title == "Whatever")
+            {
+                //DismissViewController (true, null);
+            }
+        }
+#endif
 
         void connectSignInButtonHandlers ()
         {
