@@ -34,7 +34,7 @@ namespace NomadCode.ClientAuth
         ClientAuthDetails _clientAuthDetails;
         public ClientAuthDetails ClientAuthDetails
         {
-#if MOBILE_CENTER_BUILD
+#if CSHARP_6
             get { return _clientAuthDetails ?? (_clientAuthDetails = initClientAuthDetails () ?? null); }
 #else
 			get => _clientAuthDetails ?? (_clientAuthDetails = initClientAuthDetails () ?? null);

@@ -204,7 +204,7 @@ namespace NomadCode.ClientAuth
 
             PresentViewController (alert, true, null);
 
-#if !MOBILE_CENTER_BUILD
+#if !CSHARP_6
             void handleComplainAction (UIAlertAction action)
             {
                 if (action.Title == "Complain")
@@ -224,7 +224,7 @@ namespace NomadCode.ClientAuth
         }
 
 
-#if MOBILE_CENTER_BUILD
+#if CSHARP_6
         void handleComplainAction (UIAlertAction action)
         {
             if (action.Title == "Complain")

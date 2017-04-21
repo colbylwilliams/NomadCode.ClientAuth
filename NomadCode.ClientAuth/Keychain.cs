@@ -21,7 +21,7 @@ using Android.Content;
 
 namespace NomadCode.ClientAuth
 {
-#if MOBILE_CENTER_BUILD
+#if CSHARP_6
     public class NamedTupleWorkaround
     {
         public string Account { get; set; }
@@ -40,7 +40,7 @@ namespace NomadCode.ClientAuth
         };
 
 
-#if MOBILE_CENTER_BUILD
+#if CSHARP_6
         NamedTupleWorkaround getItemFromKeychain (string service)
         {
             SecStatusCode status;
@@ -132,7 +132,7 @@ namespace NomadCode.ClientAuth
 
             var serviceId = $"{context.PackageName}.nomadcode.clientauth-{service}";
 
-#if MOBILE_CENTER_BUILD
+#if CSHARP_6
             KeyStore keystore;
             if (keyStoresCache.TryGetValue (serviceId, out keystore))
 #else
@@ -169,7 +169,7 @@ namespace NomadCode.ClientAuth
         }
 
 
-#if MOBILE_CENTER_BUILD
+#if CSHARP_6
         NamedTupleWorkaround getItemFromKeychain (string service)
         {
             var context = Android.App.Application.Context;
